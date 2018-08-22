@@ -10,6 +10,12 @@ public class ExtendMonoBehaviour : MonoBehaviour
         DoRegister();
     }
 
+    void OnEnable()
+    {
+        DoAddListener();
+        DoEnable();
+    }
+
     void Start()
     {
         DoStart();
@@ -23,12 +29,6 @@ public class ExtendMonoBehaviour : MonoBehaviour
     void Update()
     {
         DoUpdate();
-    }
-
-    void OnEnable()
-    {
-        DoAddListener();
-        DoEnable();
     }
 
     void OnDisable()

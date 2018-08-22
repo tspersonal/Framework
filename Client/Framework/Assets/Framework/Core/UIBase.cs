@@ -2,6 +2,17 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum OnChangeType
+{
+    None,
+    Input,//输入框
+    ProgressBar,//进度条
+    PopupList,//下拉框
+    Toggle,//文本框
+    Widget,//
+}
+
+
 /// <summary>
 /// 提供泛型的UI基类
 /// </summary>
@@ -27,13 +38,88 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnChangeAddListener(GameObject go, Action fun)
+    public static void OnDoubleClickAddListener(GameObject go, Action fun)
     {
         UIEventListener.Get(go).onDoubleClick = obj =>
         {
             //TODO:音效控制
             fun();
         };
+    }
+
+    /// <summary>
+    /// 变化处理
+    /// </summary>
+    /// <param name="go"></param>
+    /// <param name="changeType"></param>
+    /// <param name="fun"></param>
+    public static void OnChangeAddListener(GameObject go, OnChangeType changeType,Action fun)
+    {
+        switch (changeType)
+        {
+            case OnChangeType.None:
+                break;
+            case OnChangeType.Input:
+                UIInput inp = go.GetComponent<UIInput>();
+                if (inp != null)
+                {
+                    EventDelegate.Add(inp.onChange, () =>
+                    {
+                        //TODO:音效控制
+                        fun();
+                    });
+                }
+                else
+                {
+                    throw new Exception("UIInput组件不存在，注册事件<" + fun + ">失败！");
+                }
+                break;
+            case OnChangeType.ProgressBar:
+                UIProgressBar pro = go.GetComponent<UIProgressBar>();
+                if (pro != null)
+                {
+                    EventDelegate.Add(pro.onChange, () =>
+                    {
+                        //TODO:音效控制
+                        fun();
+                    });
+                }
+                else
+                {
+                    throw new Exception("UIInput组件不存在，注册事件<" + fun + ">失败！");
+                }
+                break;
+            case OnChangeType.PopupList:
+                UIPopupList pop = go.GetComponent<UIPopupList>();
+                if (pop != null)
+                {
+                    EventDelegate.Add(pop.onChange, () =>
+                    {
+                        //TODO:音效控制
+                        fun();
+                    });
+                }
+                else
+                {
+                    throw new Exception("UIInput组件不存在，注册事件<" + fun + ">失败！");
+                }
+                break;
+            case OnChangeType.Toggle:
+                UIToggle tog = go.GetComponent<UIToggle>();
+                if (tog != null)
+                {
+                    EventDelegate.Add(tog.onChange, () =>
+                    {
+                        //TODO:音效控制
+                        fun();
+                    });
+                }
+                else
+                {
+                    throw new Exception("UIInput组件不存在，注册事件<" + fun + ">失败！");
+                }
+                break;
+        }
     }
 
     /// <summary>
