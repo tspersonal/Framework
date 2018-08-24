@@ -7,7 +7,6 @@ public class ExtendMonoBehaviour : MonoBehaviour
     void Awake()
     {
         DoAwake();
-        DoRegister();
     }
 
     void OnEnable()
@@ -39,6 +38,7 @@ public class ExtendMonoBehaviour : MonoBehaviour
 
     void OnDestroy()
     {
+        DoClearData();
         DoOnDestroy();
     }
 
@@ -96,15 +96,7 @@ public class ExtendMonoBehaviour : MonoBehaviour
     {
 
     }
-
-    /// <summary>
-    /// 注册监听事件，例如Button、Input等
-    /// </summary>
-    protected virtual void DoRegister()
-    {
-
-    }
-
+    
     /// <summary>
     /// 注册监听事件，用于广播事件
     /// </summary>
@@ -136,5 +128,13 @@ public class ExtendMonoBehaviour : MonoBehaviour
     public virtual void DoResetData()
     {
 
+    }
+
+    /// <summary>
+    /// 清空数据
+    /// </summary>
+    public virtual void DoClearData()
+    {
+        
     }
 }

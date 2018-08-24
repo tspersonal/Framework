@@ -24,4 +24,5 @@
     {
         _instance = new T();
     }
+    
 }

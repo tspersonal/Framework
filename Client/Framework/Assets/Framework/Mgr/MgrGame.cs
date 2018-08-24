@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// 管理游戏中的继承IMgr接口的类，被Init实例化
+/// </summary>
 public class MgrGame : Singleton<MgrGame>, IMgr
 {
     public void DoMgrAwake()

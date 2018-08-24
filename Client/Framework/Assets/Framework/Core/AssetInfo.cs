@@ -10,6 +10,7 @@ public class AssetInfo
     private int _nAssetType;
     private Object _obj;
 
+    private bool _bInstantiate = false;//是否需要实例化
     private ResourceRequest _request;//用于异步加载
     public List<Action<Object>> ListListener;//用于回调事件
 
@@ -102,29 +103,65 @@ public class AssetInfo
         }
     }
 
+    public bool BInstantiate
+    {
+        get
+        {
+            return _bInstantiate;
+        }
+
+        set
+        {
+            _bInstantiate = value;
+        }
+    }
+
     /// <summary>
     /// 同步加载返回Object
     /// </summary>
-    public T LoadSync<T>() where T : Object
+    public T LoadSync<T>(string sPath) where T : Object
     {
-        return Resources.Load<T>(_sName);
+        return Resources.Load<T>(sPath);
+    }
+
+    /// <summary>
+    /// 同步加载返回Object
+    /// </summary>
+    public T[] LoadAllSync<T>(string sPath) where T : Object
+    {
+        return Resources.LoadAll<T>(sPath);
+    }
+
+    /// <summary>
+    /// 异步加载
+    /// </summary>
+    /// <returns></returns>
+    public ResourceRequest LoadAsync(string sPath)
+    {
+        var req = Resources.LoadAsync(sPath);
+        _request = req;
+        return req;
     }
 
     /// <summary>
     /// 异步加载返回Object
     /// </summary>
     /// <returns></returns>
-    public void LoadAsync()
+    public T LoadAsync<T>(string sPath) where T : Object
     {
-        _request = Resources.LoadAsync(_sName);
+        _request = Resources.LoadAsync(sPath);
+        return (T)Request.asset;
     }
 
     /// <summary>
     /// 添加回调
     /// </summary>
     /// <param name="fun"></param>
-    public void AddListener(Action<Object> fun)
+    /// <param name="bInstantiate"></param>
+    public void AddListener(Action<Object> fun, bool bInstantiate = false)
     {
+        _bInstantiate = bInstantiate;
+
         if (ListListener == null)
             ListListener = new List<Action<Object>>();
 

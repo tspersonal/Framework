@@ -1,5 +1,7 @@
-﻿
-public class MgrAssetPath : Singleton<MgrAsset>
+﻿/// <summary>
+/// 存储游戏的资源路径数据
+/// </summary>
+public class DataAssetPath
 {
     //-------------------------------Image------------------------------//
 

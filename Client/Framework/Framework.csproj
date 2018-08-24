@@ -13,14 +13,12 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectGenerator>VSTU</UnityProjectGenerator>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.3.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -310,12 +308,23 @@
     <Compile Include="Assets\Framework\Core\SingletonMonoBehaviour.cs" />
     <Compile Include="Assets\Framework\Core\TimerCount.cs" />
     <Compile Include="Assets\Framework\Core\TimeUtility.cs" />
-    <Compile Include="Assets\Framework\Core\UIBase.cs" />
+    <Compile Include="Assets\Framework\Data\DataAssetPath.cs" />
+    <Compile Include="Assets\Framework\Data\DataConfig.cs" />
+    <Compile Include="Assets\Framework\Data\DataGlobal.cs" />
+    <Compile Include="Assets\Framework\Data\DataLocal.cs" />
+    <Compile Include="Assets\Framework\Data\DataLocalPermanent.cs" />
+    <Compile Include="Assets\Framework\Data\DataPlayer.cs" />
     <Compile Include="Assets\Framework\Init\Init.cs" />
     <Compile Include="Assets\Framework\Mgr\MgrAsset.cs" />
-    <Compile Include="Assets\Framework\Mgr\MgrAssetPath.cs" />
     <Compile Include="Assets\Framework\Mgr\MgrGame.cs" />
+    <Compile Include="Assets\Framework\Mgr\MgrScene.cs" />
+    <Compile Include="Assets\Framework\Mgr\MgrSound.cs" />
+    <Compile Include="Assets\Framework\Tool\Log.cs" />
     <Compile Include="Assets\Framework\Tool\Tool.cs" />
+    <Compile Include="Assets\Framework\UI\IMgrDepth.cs" />
+    <Compile Include="Assets\Framework\UI\UIAddListener.cs" />
+    <Compile Include="Assets\Framework\UI\UIBase.cs" />
+    <Compile Include="Assets\Framework\UI\UIManager.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipItems.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\EquipRandomItem.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Game\UICursor.cs" />
@@ -501,7 +510,6 @@
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 3.shader" />
     <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed.shader" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

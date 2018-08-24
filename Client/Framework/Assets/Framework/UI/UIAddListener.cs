@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 public enum OnChangeType
 {
@@ -12,19 +11,18 @@ public enum OnChangeType
     Widget,//
 }
 
-
 /// <summary>
-/// 提供泛型的UI基类
+/// 用于UI组建的监听事件，方便加音效
 /// </summary>
-/// <typeparam name="T"></typeparam>
-public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
+public class UIAddListener
 {
     /// <summary>
     /// 点击处理
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnClickAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound">是否使用默认音频</param>
+    public static void OnClickAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
         UIEventListener.Get(go).onClick = obj =>
         {
@@ -38,7 +36,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnDoubleClickAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnDoubleClickAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
         UIEventListener.Get(go).onDoubleClick = obj =>
         {
@@ -53,7 +52,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// <param name="go"></param>
     /// <param name="changeType"></param>
     /// <param name="fun"></param>
-    public static void OnChangeAddListener(GameObject go, OnChangeType changeType,Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnChangeAddListener(GameObject go, OnChangeType changeType, Action fun, bool bUseDefaultSound = true)
     {
         switch (changeType)
         {
@@ -127,7 +127,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnSubmitAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnSubmitAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
         UIEventListener.Get(go).onSubmit = obj =>
         {
@@ -141,7 +142,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnHoverAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnHoverAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onHover = (obj, isHover) =>
@@ -157,13 +159,14 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
             }
         };
     }
-    
+
     /// <summary>
     /// 按压处理
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnPressAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnPressAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onPress = (obj, isPress) =>
@@ -175,7 +178,7 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
             }
             else
             {
-                
+
             }
         };
 
@@ -186,7 +189,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnSelectAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnSelectAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onSelect = (obj, isSelect) =>
@@ -198,7 +202,7 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
             }
             else
             {
-                
+
             }
         };
     }
@@ -208,7 +212,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnScrollAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnScrollAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onScroll = (obj, delta) =>
@@ -223,7 +228,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnDragStartAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnDragStartAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onDragStart = obj =>
@@ -238,7 +244,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnDragAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnDragAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onDrag = (obj, delta) =>
@@ -253,7 +260,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnDragEndtAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnDragEndtAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onDragEnd = obj =>
@@ -268,7 +276,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnDropAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnDropAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onDrop = (obj, objDrop) =>
@@ -283,7 +292,8 @@ public class UIBase<T> : ExtendMonoBehaviour where T : UIBase<T>, new()
     /// </summary>
     /// <param name="go"></param>
     /// <param name="fun"></param>
-    public static void OnKeyAddListener(GameObject go, Action fun)
+    /// <param name="bUseDefaultSound"></param>
+    public static void OnKeyAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onKey = (obj, key) =>

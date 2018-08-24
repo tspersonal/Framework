@@ -85,12 +85,36 @@ public class MgrAsset : Singleton<MgrAsset>, IMgr
                         }
                         else
                         {
-                            for (int j = 0; j < asset.ListListener.Count; j++)
+                            if (asset.ListListener != null)
                             {
-                                asset.ListListener[j](asset.Obj);
+                                for (int j = 0; j < asset.ListListener.Count; j++)
+                                {
+                                    if (asset.ListListener[j] != null)
+                                    {
+                                        if (asset.BInstantiate)
+                                        {
+                                            GameObject obj = Object.Instantiate((GameObject) asset.Obj);
+                                            asset.ListListener[j](obj);
+                                        }
+                                        else
+                                        {
+                                            asset.ListListener[j](asset.Obj);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        _listLoading.RemoveAt(i);
+                                        throw new Exception("加载资源<" + asset.SPath + ">后，回调异常！");
+                                    }
+                                }
+                                AssetPool.AssetCache(asset.SName, asset.SPath, asset.NAssetType, asset.Obj);
+                                _listLoading.RemoveAt(i);
                             }
-                            AssetPool.AssetCache(asset.SName, asset.SPath, asset.NAssetType, asset.Obj);
-                            _listLoading.RemoveAt(i);
+                            else
+                            {
+                                _listLoading.RemoveAt(i);
+                                throw new Exception("加载资源<" + asset.SPath + ">后，无回调类型！");
+                            }
                         }
                     }
                 }
@@ -101,7 +125,7 @@ public class MgrAsset : Singleton<MgrAsset>, IMgr
         {
             AssetInfo asset = _queWaitLoad.Dequeue();
             _listLoading.Add(asset);
-            asset.LoadAsync();
+            asset.LoadAsync(asset.SPath);
         }
     }
 
@@ -115,20 +139,61 @@ public class MgrAsset : Singleton<MgrAsset>, IMgr
 
     }
 
-    #region 异步加载
+    #region 异步等待返回加载
 
-    //异步加载对象
-    public void LoadAsyncGameObject(string sPath, Action<GameObject> fun)
+    //异步加载对象，添加到异步加载队列中
+    public GameObject LoadGameObjectAsync(string sPath)
     {
-        GameObject go = LoadAsyncAssets<GameObject>(sPath, ResType.GameObject, fun);
+        GameObject asset = LoadAssetsAsync<GameObject>(sPath, ResType.GameObject);
+        if (asset != null)
+        {
+            return Object.Instantiate(asset);
+        }
+        return null;
+    }
+
+    //异步加载对象，直接返回
+    private T LoadAssetsAsync<T>(string sPath, ResType rt) where T : Object
+    {
+        string sName = GetAssetName(sPath);
+        AssetInfo ai = AssetPool.AssetGet(sName, sPath, (int)rt);
+        if (ai != null)
+        {
+            return (T)ai.Obj;
+        }
+        ai = new AssetInfo(sName, sPath, (int)rt, null);
+        T asset = ai.LoadAsync<T>(sPath);
+        AssetPool.AssetCache(sName, sPath, (int)rt, asset);
+        return asset;
+    }
+
+    #endregion
+
+    #region 异步等待回调加载
+
+    //异步加载对象，添加到异步加载队列中
+    public void LoadGameObjectAsync(string sPath, Action<GameObject> fun, bool bInstantiate)
+    {
+        GameObject go = LoadAssetsAsync<GameObject>(sPath, ResType.GameObject, fun, bInstantiate);
         if (go != null)
         {
-            GameObject obj = Object.Instantiate(go);
-            fun(obj);
+            GameObject asset = Object.Instantiate(go);
+            fun(asset);
         }
     }
 
-    private T LoadAsyncAssets<T>(string sPath, ResType rt, Action<T> fun) where T : Object
+    //音频
+    public void LoadAudioClipAsync(string sPath, Action<AudioClip> fun, bool bInstantiate = false)
+    {
+        AudioClip asset = LoadAssetsAsync<AudioClip>(sPath, ResType.Sound, fun, bInstantiate);
+        if (asset != null)
+        {
+            fun(asset);
+        }
+    }
+
+    //添加到异步加载队列中
+    private T LoadAssetsAsync<T>(string sPath, ResType rt, Action<T> fun, bool bInstantiate = false) where T : Object
     {
         string sName = GetAssetName(sPath);
 
@@ -137,7 +202,8 @@ public class MgrAsset : Singleton<MgrAsset>, IMgr
         {
             if (item.SName == sName)
             {
-                item.AddListener(fun as Action<Object>);
+                Action<Object> action = o => fun((T)o);
+                item.AddListener(action, bInstantiate);
                 return null;
             }
         }
@@ -146,7 +212,8 @@ public class MgrAsset : Singleton<MgrAsset>, IMgr
         {
             if (item.SName == sName)
             {
-                item.AddListener(fun as Action<Object>);
+                Action<Object> action = o => fun((T)o);
+                item.AddListener(action, bInstantiate);
                 return null;
             }
         }
@@ -161,18 +228,14 @@ public class MgrAsset : Singleton<MgrAsset>, IMgr
         {
             //都没有 先创建
             AssetInfo asset = new AssetInfo(sName, sPath, (int)rt, null);
-            asset.AddListener(fun as Action<Object>);
+            //T 转为Object类型
+            Action<Object> action = o => fun((T)o);
+            asset.AddListener(action, bInstantiate);
+
             //添加到等待队列
             _queWaitLoad.Enqueue(asset);
             return null;
         }
-    }
-
-    private T[] LoadAsyncAssetsAll<T>(string sName, string sPath, ResType rt) where T : Object
-    {
-
-        T[] arr = Resources.LoadAll<T>(sPath);
-        return arr;
     }
 
     #endregion
@@ -180,19 +243,27 @@ public class MgrAsset : Singleton<MgrAsset>, IMgr
 
     #region 同步加载
     //同步加载对象
-    public GameObject LoadSyncGameObject(string sPath)
+    public GameObject LoadGameObjectSync(string sPath)
     {
-        GameObject go = LoadSyncAssets<GameObject>(sPath, ResType.GameObject);
+        GameObject go = LoadAssetsSync<GameObject>(sPath, ResType.GameObject);
         if (go != null)
         {
             return Object.Instantiate(go);
         }
         return null;
     }
+    //音频
+    public AudioClip LoadAudioClipSync(string sPath)
+    {
+        AudioClip asset = LoadAssetsSync<AudioClip>(sPath, ResType.GameObject);
+        if (asset != null)
+        {
+            return asset;
+        }
+        return null;
+    }
 
-
-
-    private T LoadSyncAssets<T>(string sPath, ResType rt) where T : Object
+    private T LoadAssetsSync<T>(string sPath, ResType rt) where T : Object
     {
         string sName = GetAssetName(sPath);
         AssetInfo ai = AssetPool.AssetGet(sName, sPath, (int)rt);
@@ -200,15 +271,17 @@ public class MgrAsset : Singleton<MgrAsset>, IMgr
         {
             return (T)ai.Obj;
         }
-        T asset = Resources.Load<T>(sPath);
+        ai = new AssetInfo(sName, sPath, (int)rt, null);
+        T asset = ai.LoadSync<T>(sPath);
         AssetPool.AssetCache(sName, sPath, (int)rt, asset);
         return asset;
     }
 
-    private T[] LoadSyncAssetsAll<T>(string sPath, ResType rt) where T : Object
+    private T[] LoadAllAssetsSync<T>(string sPath, ResType rt) where T : Object
     {
         string sName = GetAssetName(sPath);
-        T[] arr = Resources.LoadAll<T>(sPath);
+        AssetInfo ai = new AssetInfo(sName, sPath, (int)rt, null);
+        T[] arr = ai.LoadAllSync<T>(sPath);
         return arr;
     }
     #endregion
