@@ -51,18 +51,18 @@ namespace Assets
             base.DoUpdate();
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                MgrAsset.Instance.LoadGameObjectAsync("GiftObj", Test1, true);
+                MgrAsset.Instance.LoadGameObjectAsync("Test", Test1, true);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                GameObject go = MgrAsset.Instance.LoadGameObjectAsync("GiftObj");
+                GameObject go = MgrAsset.Instance.LoadGameObjectAsync("Test");
                 Log.Debug("结束异步返回加载");
                 //go.name = "异步返回";
                 //go.transform.SetParent(transform, false);
             }
             else if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                GameObject go1 = MgrAsset.Instance.LoadGameObjectSync("GiftObj");
+                GameObject go1 = MgrAsset.Instance.LoadGameObjectSync("Test");
                 Log.Debug("结束同步返回加载");
                 //go1.name = "同步返回";
                 //go1.transform.SetParent(transform, false);

@@ -301,6 +301,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Framework\Editor\Other.cs" />
+    <Compile Include="Assets\Framework\Editor\ShortcutActions.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Editor\InvDatabaseInspector.cs" />
     <Compile Include="Assets\NGUI\Examples\Scripts\InventorySystem\Editor\InvFindItem.cs" />
     <Compile Include="Assets\NGUI\Scripts\Editor\ActiveAnimationEditor.cs" />
