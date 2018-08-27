@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System;
-using FrameworkForCSharp.NetWorks;
+﻿using FrameworkForCSharp.NetWorks;
 
 public class NetGateway : AuthConnectionClient
 {
@@ -14,8 +12,8 @@ public class NetGateway : AuthConnectionClient
     }
     protected override void OnAuthSuccessed()
     {
-        Log.Debug("連接服務器成功...");
-        NetConnectServer.m_IsConnectServer = true;
+        Log.Debug("连接服務器成功...");
+        NetConnectServer.IsConnectServer = true;
 
         if (!DataPlayer.Instance.IsLogin)
         {
@@ -24,21 +22,21 @@ public class NetGateway : AuthConnectionClient
         }
         else
         {
-            ClientToServerMsg.Instance.Send(Opcodes.Client_Character_Create, DataPlayer.Instance.OpenId, DataPlayer.Instance.Name,
+            NetSendMessageToServer.Instance.Send(Opcodes.Client_Character_Create, DataPlayer.Instance.OpenId, DataPlayer.Instance.Name,
                 DataPlayer.Instance.HeadId, (byte)DataPlayer.Instance.Sex);
         }
 
     }
     protected override void OnDisconnected()
     {
-        NetConnectServer.m_IsConnectServer = false;
+        NetConnectServer.IsConnectServer = false;
         Log.Debug("断开服務器成功...");
     }
     protected override void DefaultHandleMessage(NetworkMessage message)
     {
         MgrHandler.DispatchMessage(message);
-        if (NetConnectServer.m_WaitServerMsgCount > 0)
-            NetConnectServer.m_WaitServerMsgCount--;
+        if (NetConnectServer.WaitServerMsgCount > 0)
+            NetConnectServer.WaitServerMsgCount--;
     }
 }
 

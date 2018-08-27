@@ -22,6 +22,11 @@ namespace Assets
                 AddListener(i);
             });
 
+            UIAddListener.OnSelectAddListener(ui.gameObject, (obj, detal) =>
+            {
+                
+            });
+
             //stopwatch = new Stopwatch();
             //stopwatch.Start();
             //startTime1 = stopwatch.Elapsed;
@@ -45,6 +50,12 @@ namespace Assets
             //TimeSpan ts3 = stopwatch.Elapsed;
             //Log.Debug("结束同步加载，花费时间：" + (ts3 - startTime3));
         }
+
+        private void OnSelect(GameObject arg1, bool arg2)
+        {
+            throw new System.NotImplementedException();
+        }
+
 
         public override void DoUpdate()
         {

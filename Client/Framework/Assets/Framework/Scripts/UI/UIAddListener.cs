@@ -22,12 +22,12 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound">是否使用默认音频</param>
-    public static void OnClickAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnClickAddListener(GameObject go, Action<GameObject> fun, bool bUseDefaultSound = true)
     {
         UIEventListener.Get(go).onClick = obj =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj);
         };
     }
 
@@ -37,12 +37,12 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnDoubleClickAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnDoubleClickAddListener(GameObject go, Action<GameObject> fun, bool bUseDefaultSound = true)
     {
         UIEventListener.Get(go).onDoubleClick = obj =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj);
         };
     }
 
@@ -128,12 +128,12 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnSubmitAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnSubmitAddListener(GameObject go, Action<GameObject> fun, bool bUseDefaultSound = true)
     {
         UIEventListener.Get(go).onSubmit = obj =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj);
         };
     }
 
@@ -143,7 +143,7 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnHoverAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnHoverAddListener(GameObject go, Action<GameObject, bool> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onHover = (obj, isHover) =>
@@ -151,12 +151,12 @@ public class UIAddListener
             if (isHover)
             {
                 //TODO:音效控制
-                fun();
             }
             else
             {
 
             }
+            fun(obj, isHover);
         };
     }
 
@@ -166,7 +166,7 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnPressAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnPressAddListener(GameObject go, Action<GameObject, bool> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onPress = (obj, isPress) =>
@@ -174,12 +174,12 @@ public class UIAddListener
             if (isPress)
             {
                 //TODO:音效控制
-                fun();
             }
             else
             {
 
             }
+            fun(obj, isPress);
         };
 
     }
@@ -190,7 +190,7 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnSelectAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnSelectAddListener(GameObject go, Action<GameObject, bool> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onSelect = (obj, isSelect) =>
@@ -198,12 +198,12 @@ public class UIAddListener
             if (isSelect)
             {
                 //TODO:音效控制
-                fun();
             }
             else
             {
 
             }
+            fun(obj, isSelect);
         };
     }
 
@@ -213,13 +213,13 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnScrollAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnScrollAddListener(GameObject go, Action<GameObject, float> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onScroll = (obj, delta) =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj, delta);
         };
     }
 
@@ -229,13 +229,13 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnDragStartAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnDragStartAddListener(GameObject go, Action<GameObject> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onDragStart = obj =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj);
         };
     }
 
@@ -245,13 +245,13 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnDragAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnDragAddListener(GameObject go, Action<GameObject, Vector2> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onDrag = (obj, delta) =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj, delta);
         };
     }
 
@@ -261,13 +261,13 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnDragEndtAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnDragEndtAddListener(GameObject go, Action<GameObject> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onDragEnd = obj =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj);
         };
     }
 
@@ -277,13 +277,13 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnDropAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnDropAddListener(GameObject go, Action<GameObject, GameObject> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onDrop = (obj, objDrop) =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj, objDrop);
         };
     }
 
@@ -293,13 +293,13 @@ public class UIAddListener
     /// <param name="go"></param>
     /// <param name="fun"></param>
     /// <param name="bUseDefaultSound"></param>
-    public static void OnKeyAddListener(GameObject go, Action fun, bool bUseDefaultSound = true)
+    public static void OnKeyAddListener(GameObject go, Action<GameObject, KeyCode> fun, bool bUseDefaultSound = true)
     {
 
         UIEventListener.Get(go).onKey = (obj, key) =>
         {
             //TODO:音效控制
-            fun();
+            fun(obj, key);
         };
     }
 }

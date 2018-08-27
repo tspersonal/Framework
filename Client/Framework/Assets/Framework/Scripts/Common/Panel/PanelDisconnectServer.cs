@@ -54,7 +54,7 @@ namespace Assets.Framework.Scripts.Common.Panel
                     _labDesc.gameObject.SetActive(true);
                     _labDesc.text = "正在连接中...";
                     NetConnectServer.Instance.DisconnectServer();
-                    NetConnectServer.ConnectionServer(Tool.GetServerIP(ServerInfo.Instance.Ip), (ushort)ServerInfo.Instance.Port);
+                    NetConnectServer.ConnectionServer(Tool.GetServerIp(NetServerInfo.Instance.ip), (ushort)NetServerInfo.Instance.port);
                 }
             }
         }

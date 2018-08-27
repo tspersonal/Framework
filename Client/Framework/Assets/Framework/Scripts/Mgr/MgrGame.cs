@@ -13,6 +13,8 @@ public class MgrGame : Singleton<MgrGame>, IMgr
         Application.runInBackground = true;
         //设置60
         Application.targetFrameRate = 60;
+        //设置屏幕方向
+        //Screen.SetResolution(750, 1334, false);
 
         MgrHandler.Instance.DoMgrAwake();
     }

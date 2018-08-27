@@ -15,24 +15,24 @@ namespace Assets.Framework.Scripts.Common.Panel
         {
             base.DoStart();
             _labClientV.text = "客户端版本:" + Application.version;
-            _labServerV.text = "服务器版本" + ServerInfo.Instance.Version;
-            if (ServerInfo.Instance.UpdateMessage.Contains("@"))
+            _labServerV.text = "服务器版本" + NetServerInfo.Instance.version;
+            if (NetServerInfo.Instance.update_message.Contains("@"))
             {
-                string[] strs = ServerInfo.Instance.UpdateMessage.Split('@');
+                string[] strs = NetServerInfo.Instance.update_message.Split('@');
                 _labContent.text = strs[0];
             }
             else
             {
-                _labContent.text = ServerInfo.Instance.UpdateMessage;
+                _labContent.text = NetServerInfo.Instance.update_message;
             }
         }
 
         public void DownloadApp()
         {
             if (Application.platform == RuntimePlatform.Android)
-                Application.OpenURL(ServerInfo.Instance.UpdateAndroidUrl);
+                Application.OpenURL(NetServerInfo.Instance.update_android_url);
             else if (Application.platform == RuntimePlatform.IPhonePlayer)
-                Application.OpenURL(ServerInfo.Instance.UpdateIosUrl);
+                Application.OpenURL(NetServerInfo.Instance.update_ios_url);
         }
     }
 }

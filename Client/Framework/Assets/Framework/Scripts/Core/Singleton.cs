@@ -1,4 +1,8 @@
-﻿public class Singleton<T> where T : class, new()
+﻿/// <summary>
+/// 单例基类
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class Singleton<T> where T : class, new()
 {
     private static T _instance;
     private static readonly object OLock = new object();

@@ -14,7 +14,7 @@
         void ShowDisconnectServer()
         {
             //  UIManager.Instance.ShowUiPanel(UIPaths.DisconnectServer);
-            NetConnectServer.m_WaitServerMsgCount = 0;
+            NetConnectServer.WaitServerMsgCount = 0;
             //UIManager.Instance.Hide(DataAssetPath.LoadingObj);
         }
     }

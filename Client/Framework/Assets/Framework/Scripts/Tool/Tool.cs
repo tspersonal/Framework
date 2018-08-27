@@ -59,7 +59,7 @@ public class Tool
     /// </summary>
     /// <param name="url"></param>
     /// <returns></returns>
-    public static string GetServerIP(string url)
+    public static string GetServerIp(string url)
     {
         string str = url.Substring(0, 7);
         if (str == "192.168") return url;
@@ -68,10 +68,10 @@ public class Tool
         switch (ipHost.AddressList[0].AddressFamily)
         {
             case AddressFamily.InterNetwork:
-                NetConnectServer.m_IsIpv6 = false;
+                NetConnectServer.IsIpv6 = false;
                 break;
             case AddressFamily.InterNetworkV6:
-                NetConnectServer.m_IsIpv6 = true;
+                NetConnectServer.IsIpv6 = true;
                 break;
 
         }

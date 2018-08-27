@@ -6,9 +6,9 @@ using UnityEngine;
 /// </summary>
 public class NetConnectServer : SingletonMonoBehaviour<NetConnectServer>
 {
-    public static bool m_IsConnectServer = false;
-    public static int m_WaitServerMsgCount = 0;//消息计数
-    public static bool m_IsIpv6 = false;
+    public static bool IsConnectServer = false;
+    public static int WaitServerMsgCount = 0;//消息计数
+    public static bool IsIpv6 = false;
 
     public static class Global
     {
@@ -27,14 +27,17 @@ public class NetConnectServer : SingletonMonoBehaviour<NetConnectServer>
     {
         base.DoStart();
 
-        string sUrl = "http://hw389.cn:97/ClientQuery.aspx?method=queryServerAddress&gameId={0}&clientVersion={1}";
+        string url = "";
+        //string url = "http://game.youthgamer.com:97/ClientQuery.aspx?method=queryServerAddress&gameId={0}&clientVersion={1}";
+        //url = string.Format(url, "tqq", Application.version);
 
-        MgrDownLoad.Instance.DownLoadText(sUrl, GetServerConfig);
+        MgrDownLoad.Instance.DownLoadText(url, GetServerConfig);
     }
 
     public override void DoUpdate()
     {
         base.DoUpdate();
+        //Connection.update();
     }
 
     /// <summary>
@@ -42,20 +45,24 @@ public class NetConnectServer : SingletonMonoBehaviour<NetConnectServer>
     /// </summary>
     private void GetServerConfig(string sConfig)
     {
-        if(string.IsNullOrEmpty(sConfig))
+        if(!string.IsNullOrEmpty(sConfig))
         {
-            ServerInfo.Instance = JsonUtility.FromJson<ServerInfo>(sConfig);
-            if (ServerInfo.Instance.StatusCode == "Success")
+            NetServerInfo.Instance = JsonUtility.FromJson<NetServerInfo>(sConfig);
+            if (NetServerInfo.Instance.statusCode == "Success")
             {
-                if (ServerInfo.Instance.Version == Application.version)
+                if (NetServerInfo.Instance.version == Application.version)
                 {
-                    ConnectionServer(Tool.GetServerIP(ServerInfo.Instance.Ip), (ushort)ServerInfo.Instance.Port);
+                    //ConnectionServer(Tool.GetServerIp(NetServerInfo.Instance.ip), (ushort) NetServerInfo.Instance.port);
                 }
                 else
                 {
                     //TODO:显示游戏更新面板
                     //UIManager.Instance.ShowUiPanel(UIPaths.GameUpdate, OpenPanelType.MinToMax);
                 }
+            }
+            else
+            {
+                //未找到服务器
             }
         }
     }
@@ -68,7 +75,7 @@ public class NetConnectServer : SingletonMonoBehaviour<NetConnectServer>
     public static void ConnectionServer(string ip, ushort port)
     {
         Global.TcpGateway = new GatewayClient();//
-        if (m_IsIpv6)
+        if (IsIpv6)
             Global.TcpGateway.connectIpv6<NetGateway>(ip, port);
         else
             Global.TcpGateway.connect<NetGateway>(ip, port);
