@@ -18,6 +18,7 @@
             }
             return _instance;
         }
+        set { _instance = value; }
     }
 
     public static void Clear()

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -50,5 +52,30 @@ public class Tool
         {
             throw new Exception("GetMD5HashFromFile() fail,error:" + ex.Message);
         }
+    }
+
+    /// <summary>
+    /// 解析URL 获得IP
+    /// </summary>
+    /// <param name="url"></param>
+    /// <returns></returns>
+    public static string GetServerIP(string url)
+    {
+        string str = url.Substring(0, 7);
+        if (str == "192.168") return url;
+        IPHostEntry ipHost = Dns.GetHostEntry(url);
+        string serverIp = "";
+        switch (ipHost.AddressList[0].AddressFamily)
+        {
+            case AddressFamily.InterNetwork:
+                NetConnectServer.m_IsIpv6 = false;
+                break;
+            case AddressFamily.InterNetworkV6:
+                NetConnectServer.m_IsIpv6 = true;
+                break;
+
+        }
+        serverIp = ipHost.AddressList[0].ToString();
+        return serverIp;
     }
 }

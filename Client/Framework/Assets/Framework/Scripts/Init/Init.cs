@@ -18,8 +18,6 @@ public class Init : ExtendMonoBehaviour
         base.DoStart();
         if (_mgrGame != null)
             _mgrGame.DoMgrStart();
-
-        SceneManager.LoadScene("test");
     }
 
     public override void DoUpdate()

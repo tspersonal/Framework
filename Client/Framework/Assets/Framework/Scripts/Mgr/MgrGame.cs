@@ -7,7 +7,14 @@ public class MgrGame : Singleton<MgrGame>, IMgr
 {
     public void DoMgrAwake()
     {
-        
+        //游戏不休眠
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        //后台运行
+        Application.runInBackground = true;
+        //设置60
+        Application.targetFrameRate = 60;
+
+        MgrHandler.Instance.DoMgrAwake();
     }
 
     public void DoMgrOnEnable()

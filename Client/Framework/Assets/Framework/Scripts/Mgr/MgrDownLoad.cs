@@ -65,6 +65,10 @@ public class MgrDownLoad : SingletonMonoBehaviour<MgrDownLoad>
             }
             fun(value);
         }
+        else if (!www.isDone)
+        {
+            Log.DebugError("下载Text未成功！");
+        }
         else if (www.error != null)
         {
             Log.DebugError("下载Text错误：" + www.error);

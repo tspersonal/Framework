@@ -5,6 +5,32 @@
 /// </summary>
 public class DataLocal : Singleton<DataLocal>
 {
+    //本地存储姓名
+    public string PlayerName
+    {
+        get { return PlayerPrefs.GetString("PlayerName"); }
+        set { PlayerPrefs.SetString("PlayerName", value); }
+    }
+    //本地存储头像id
+    public string PlayerHeadId
+    {
+        get { return PlayerPrefs.GetString("PlayerHeadId"); }
+        set { PlayerPrefs.SetString("PlayerHeadId", value); }
+    }
+    //本地存储OpenId
+    public string PlayerOpenId
+    {
+        get { return PlayerPrefs.GetString("PlayerOpenId", "n"); }
+        set { PlayerPrefs.SetString("PlayerOpenId", value); }
+    }
+    //本地存储性别
+    public int PlayerSex
+    {
+        get { return PlayerPrefs.GetInt("PlayerSex", 1); }
+        set { PlayerPrefs.SetInt("PlayerSex", value); }
+    }
+
+
     //游戏背景音乐
     public float GameMusic
     {
@@ -34,6 +60,11 @@ public class DataLocal : Singleton<DataLocal>
 
     public void ClearData()
     {
+        PlayerPrefs.DeleteKey("PlayerName");
+        PlayerPrefs.DeleteKey("PlayerHeadId");
+        PlayerPrefs.DeleteKey("PlayerOpenId");
+        PlayerPrefs.DeleteKey("PlayerSex");
+
         PlayerPrefs.DeleteKey("GameMusic");
         PlayerPrefs.DeleteKey("GameEffect");
         PlayerPrefs.DeleteKey("GameVoice");
