@@ -25,6 +25,8 @@ public class MgrDownLoad : SingletonMonoBehaviour<MgrDownLoad>
     /// 缓存2D纹理
     /// </summary>
     private Dictionary<string, Texture2D> _dicCacheTexture2D = new Dictionary<string, Texture2D>();
+    //相同的资源进行缓存，当一个加载完毕，所有的即被赋值
+    private Dictionary<string, List<Action<Texture2D>>> _dicCacheAction = new Dictionary<string, List<Action<Texture2D>>>();
     /// <summary>
     /// 缓存AssetBundle
     /// </summary>
@@ -83,14 +85,50 @@ public class MgrDownLoad : SingletonMonoBehaviour<MgrDownLoad>
     {
         string sMd5 = Tool.CalculateMd5Hash(sPath);
 
-        if (_dicCacheTexture2D.ContainsKey(sMd5))
+        if (_dicCacheAction.ContainsKey(sMd5))
         {
-            if (!bCover)
+            //如果有资源正在被加载
+            if (_dicCacheTexture2D.ContainsKey(sMd5))
             {
-                fun(_dicCacheTexture2D[sMd5]);
-                return;
+                //如果该资源正在被加载，但是已经被加载完毕，则直接回调
+                Texture2D tex = _dicCacheTexture2D[sMd5];
+                if (tex != null)
+                {
+                    //资源不为空的话
+                    if (!bCover)
+                    {
+                        //如果不被覆盖
+                        fun(tex);
+                        return;
+                    }
+                }
+                //重新加载
+                if (_dicCacheAction[sMd5] == null)
+                    _dicCacheAction[sMd5] = new List<Action<Texture2D>>();
+                if (!_dicCacheAction[sMd5].Contains(fun))
+                    _dicCacheAction[sMd5].Add(fun);
+
+            }
+            else
+            {
+                //如果该资源正在被加载，但是却没被加载完毕，则保存改回调，等待加载完毕
+                if (_dicCacheAction[sMd5] == null)
+                    _dicCacheAction[sMd5] = new List<Action<Texture2D>>();
+                if (!_dicCacheAction[sMd5].Contains(fun))
+                    _dicCacheAction[sMd5].Add(fun);
+                //如果这个是第一个入池的话 那么重新加载
+                if (_dicCacheAction[sMd5].Count > 1)
+                    return;
             }
         }
+        else
+        {
+            //如果没有资源正在被加载
+            List<Action<Texture2D>> list = new List<Action<Texture2D>>();
+            list.Add(fun);
+            _dicCacheAction.Add(sMd5, list);
+        }
+
         StartCoroutine(IeDownLoadTexture2D(sPath, sMd5, fun, sDefaultLocal));
     }
 
@@ -103,6 +141,18 @@ public class MgrDownLoad : SingletonMonoBehaviour<MgrDownLoad>
             Texture2D value = www.texture;
             if (value != null)
             {
+                //对所有的加载入口进行回调
+                for (var i = 0; i < _dicCacheAction[sMd5].Count; i++)
+                {
+                    Action<Texture2D> action = _dicCacheAction[sMd5][i];
+                    if (action != null)
+                    {
+                        action(value);
+                    }
+                }
+                _dicCacheAction[sMd5].Clear();
+
+                //保存加载内容
                 if (_dicCacheTexture2D.ContainsKey(sMd5))
                 {
                     _dicCacheTexture2D[sMd5] = value;
@@ -115,12 +165,52 @@ public class MgrDownLoad : SingletonMonoBehaviour<MgrDownLoad>
             else
             {
                 value = Resources.Load<Texture2D>(sDefaultLocal);
+                //对所有的加载入口进行回调
+                for (var i = 0; i < _dicCacheAction[sMd5].Count; i++)
+                {
+                    Action<Texture2D> action = _dicCacheAction[sMd5][i];
+                    if (action != null)
+                    {
+                        action(value);
+                    }
+                }
+                _dicCacheAction[sMd5].Clear();
+				
+				 //保存加载内容
+                if (_dicCacheTexture2D.ContainsKey(sMd5))
+                {
+                    _dicCacheTexture2D[sMd5] = null;
+                }
+                else
+                {
+                    _dicCacheTexture2D.Add(sMd5, null);
+                }
             }
-            fun(value);
         }
-        else if (www.error != null)
+        else if (www.isDone && www.error != null)
         {
             Log.DebugError("下载Texture2D错误：" + www.error);
+            //赋默认值
+            Texture2D value = Resources.Load<Texture2D>(sDefaultLocal);
+            for (var i = 0; i < _dicCacheAction[sMd5].Count; i++)
+            {
+                Action<Texture2D> action = _dicCacheAction[sMd5][i];
+                if (action != null)
+                {
+                    action(value);
+                }
+            }
+            _dicCacheAction[sMd5].Clear();
+			
+			 //保存加载内容
+                if (_dicCacheTexture2D.ContainsKey(sMd5))
+                {
+                    _dicCacheTexture2D[sMd5] = null;
+                }
+                else
+                {
+                    _dicCacheTexture2D.Add(sMd5, null);
+                }
         }
     }
 
